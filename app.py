@@ -22,60 +22,84 @@ class producto:
         self.stock += cantidad
 
 @app.route("/")
-def index():
+def home():
+    return render_template("home.html")
 
-    conexion = sqlite3.connect("cafeteria.db")
-    cursor = conexion.cursor()
-
-    cursor.execute("SELECT * FROM productos")
-    productos = cursor.fetchall()
-
-    conexion.close()
-
+@app.route("/inventario")
+def inventario():
+    productos = [
+        {"nombre": "Café", "precio": 200, "stock": 10},
+        {"nombre": "Té", "precio": 150, "stock": 20},
+        {"nombre": "Medialuna", "precio": 100, "stock": 30},
+    ]
     return render_template("index.html", productos=productos)
+
+# @app.route("/")
+# def index():
+
+#     conexion = sqlite3.connect("cafeteria.db")
+#     cursor = conexion.cursor()
+
+#     cursor.execute("SELECT * FROM productos")
+#     productos = cursor.fetchall()
+
+#     conexion.close()
+
+#     return render_template("index.html", productos=productos)
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_producto(id):
-
-    conexion = sqlite3.connect("cafeteria.db")
-    cursor = conexion.cursor()
-
-    if request.method == "POST":
-
-        nombre = request.form["nombre"]
-        categoria = request.form["categoria"]
-        precio = request.form["precio"]
-        stock = request.form["stock"]
-
-        cursor.execute("""
-        UPDATE productos
-        SET nombre = ?, categoria = ?, precio = ?, stock = ?
-        WHERE id = ?
-        """, (nombre, categoria, precio, stock, id))
-
-        conexion.commit()
-        conexion.close()
-
-        return redirect("/")
-
-    cursor.execute("SELECT * FROM productos WHERE id = ?", (id,))
-    producto = cursor.fetchone()
-
-    conexion.close()
-
+    # Datos ficticios para probar diseño
+    producto = (id, "Café", "Bebida", 200, 10)
     return render_template("editar_producto.html", producto=producto)
+
+# @app.route("/editar/<int:id>", methods=["GET", "POST"])
+# def editar_producto(id):
+
+#     conexion = sqlite3.connect("cafeteria.db")
+#     cursor = conexion.cursor()
+
+#     if request.method == "POST":
+
+#         nombre = request.form["nombre"]
+#         categoria = request.form["categoria"]
+#         precio = request.form["precio"]
+#         stock = request.form["stock"]
+
+#         cursor.execute("""
+#         UPDATE productos
+#         SET nombre = ?, categoria = ?, precio = ?, stock = ?
+#         WHERE id = ?
+#         """, (nombre, categoria, precio, stock, id))
+
+#         conexion.commit()
+#         conexion.close()
+
+#         return redirect("/")
+
+#     cursor.execute("SELECT * FROM productos WHERE id = ?", (id,))
+#     producto = cursor.fetchone()
+
+#     conexion.close()
+
+#     return render_template("editar_producto.html", producto=producto)
 
 @app.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar_producto(id):
-
-    conexion = sqlite3.connect("cafeteria.db")
-    cursor = conexion.cursor()
-
-    cursor.execute("DELETE FROM productos WHERE id = ?", (id,))
-
-    conexion.commit()
-    conexion.close()
-
+    # Simulación de eliminación
     return redirect("/")
 
-app.run(debug=True)
+# @app.route("/eliminar/<int:id>", methods=["POST"])
+# def eliminar_producto(id):
+
+#     conexion = sqlite3.connect("cafeteria.db")
+#     cursor = conexion.cursor()
+
+#     cursor.execute("DELETE FROM productos WHERE id = ?", (id,))
+
+#     conexion.commit()
+#     conexion.close()
+
+#     return redirect("/")
+
+# app.run(debug=True)
