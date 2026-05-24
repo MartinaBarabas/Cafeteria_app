@@ -1,49 +1,130 @@
+# =========================
+# modelos/producto.py
+# =========================
+
+from database import conectar
+
 class Producto:
 
-    def __init__(self, id_producto, nombre, categoria, precio, stock, estado=True):
-        self.id = id_producto
+    def __init__(self, nombre, categoria, precio, stock):
+
         self.nombre = nombre
         self.categoria = categoria
         self.precio = precio
         self.stock = stock
-        self.estado = estado
 
-    # Método vender
-    def vender(self, cantidad):
+    # =========================
+    # CREAR PRODUCTO
+    # =========================
 
-        if cantidad <= 0:
-            print("Cantidad inválida")
-            return
+    def crear_producto(self):
 
-        if self.stock >= cantidad:
-            self.stock -= cantidad
-            print(f"Se vendieron {cantidad} unidades de {self.nombre}")
-        else:
-            print("No hay suficiente stock")
+        conexion = conectar()
+        cursor = conexion.cursor()
 
-    # Método reponer stock
-    def reponer_stock(self, cantidad):
+        sql = """
+        INSERT INTO productos
+        (nombre, categoria, precio, stock, disponible)
+        VALUES (%s, %s, %s, %s, %s)
+        """
 
-        if cantidad > 0:
-            self.stock += cantidad
-            print(f"Stock actualizado: {self.stock}")
+        valores = (
+            self.nombre,
+            self.categoria,
+            self.precio,
+            self.stock,
+            True
+        )
 
-    # Método sin stock
-    def sin_stock(self):
+        cursor.execute(sql, valores)
 
-        return self.stock == 0
+        conexion.commit()
+        conexion.close()
 
-    # Método calcular valor stock
-    def calcular_valor_stock(self):
+    # =========================
+    # LISTAR PRODUCTOS
+    # =========================
 
-        return self.precio * self.stock
+    @staticmethod
+    def listar_productos():
 
-    # Método actualizar precio
-    def actualizar_precio(self, nuevo_precio):
+        conexion = conectar()
+        cursor = conexion.cursor()
 
-        if nuevo_precio > 0:
-            self.precio = nuevo_precio
+        cursor.execute("SELECT * FROM productos")
 
-    def __str__(self):
+        productos = cursor.fetchall()
 
-        return f"{self.nombre} - ${self.precio} - Stock: {self.stock}"
+        conexion.close()
+
+        return productos
+
+    # =========================
+    # OBTENER PRODUCTO
+    # =========================
+
+    @staticmethod
+    def obtener_producto(id):
+
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            "SELECT * FROM productos WHERE id = %s",
+            (id,)
+        )
+
+        producto = cursor.fetchone()
+
+        conexion.close()
+
+        return producto
+
+    # =========================
+    # EDITAR PRODUCTO
+    # =========================
+
+    def editar_producto(self, id):
+
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        sql = """
+        UPDATE productos
+        SET nombre = %s,
+            categoria = %s,
+            precio = %s,
+            stock = %s
+        WHERE id = %s
+        """
+
+        valores = (
+            self.nombre,
+            self.categoria,
+            self.precio,
+            self.stock,
+            id
+        )
+
+        cursor.execute(sql, valores)
+
+        conexion.commit()
+        conexion.close()
+
+    # =========================
+    # ELIMINAR PRODUCTO
+    # =========================
+
+    @staticmethod
+    def eliminar_producto(id):
+
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            "DELETE FROM productos WHERE id = %s",
+            (id,)
+        )
+
+        conexion.commit()
+        conexion.close()
