@@ -102,3 +102,5 @@ def vender_producto(id):
 
     conexion.close()
     return redirect("/inventario")
+
+app.run(debug=True)
