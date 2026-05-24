@@ -1,6 +1,6 @@
-# =========================
+
 # modelos/producto.py
-# =========================
+
 
 from database import conectar
 
@@ -13,9 +13,7 @@ class Producto:
         self.precio = precio
         self.stock = stock
 
-    # =========================
     # CREAR PRODUCTO
-    # =========================
 
     def crear_producto(self):
 
@@ -41,9 +39,9 @@ class Producto:
         conexion.commit()
         conexion.close()
 
-    # =========================
+    
     # LISTAR PRODUCTOS
-    # =========================
+    
 
     @staticmethod
     def listar_productos():
@@ -59,9 +57,9 @@ class Producto:
 
         return productos
 
-    # =========================
+    
     # OBTENER PRODUCTO
-    # =========================
+  
 
     @staticmethod
     def obtener_producto(id):
@@ -80,9 +78,9 @@ class Producto:
 
         return producto
 
-    # =========================
+    
     # EDITAR PRODUCTO
-    # =========================
+    
 
     def editar_producto(self, id):
 
@@ -111,9 +109,9 @@ class Producto:
         conexion.commit()
         conexion.close()
 
-    # =========================
+    
     # ELIMINAR PRODUCTO
-    # =========================
+   
 
     @staticmethod
     def eliminar_producto(id):
