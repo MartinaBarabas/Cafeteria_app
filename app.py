@@ -17,14 +17,14 @@ def crear_producto():
     if request.method == "POST":
         nombre = request.form["nombre"]
         categoria = request.form["categoria"]
-        precio = request.form["precio"]
-        stock = request.form["stock"]
+        precio = float(request.form["precio"])
+        stock = int(request.form["stock"])
 
         nuevo_producto = Producto(
-            nombre,
-            categoria,
-            precio,
-            stock
+            nombre=nombre,
+            categoria=categoria,
+            precio=precio,
+            stock=stock
         )
         nuevo_producto.crear_producto()
         return redirect("/inventario")
@@ -43,14 +43,14 @@ def editar_producto(id):
     if request.method == "POST":
         nombre = request.form["nombre"]
         categoria = request.form["categoria"]
-        precio = request.form["precio"]
-        stock = request.form["stock"]
+        precio = float(request.form["precio"])
+        stock = int(request.form["stock"])
 
         producto = Producto(
-            nombre,
-            categoria,
-            precio,
-            stock
+            nombre=nombre,
+            categoria=categoria,
+            precio=precio,
+            stock=stock
         )
         producto.editar_producto(id)
         return redirect("/inventario")

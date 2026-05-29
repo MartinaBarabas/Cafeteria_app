@@ -1,0 +1,50 @@
+body {
+  background-image: url('/static/Fondo_NuevoProducto.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+}
+
+.navbar {
+  background-color: rgba(75, 46, 46, 0.9);
+  justify-content: center;
+}
+
+.navbar-brand {
+  margin: 0 auto;
+  font-size: 1.8rem;
+}
+
+.menu-container {
+  background-color: rgba(75, 46, 46, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.welcome-text {
+  font-size: 1.3rem;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.btn-custom {
+  background-color: #A67B5B;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #8B5E3C;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border-radius: 8px;
+}
