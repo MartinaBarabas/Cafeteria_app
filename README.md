@@ -3,19 +3,19 @@
 Proyecto integrador de Programación Avanzada (UNAB 2026).  
 Aplicación web desarrollada con **Flask, Python y MySql** para la gestión de productos de una cafetería.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 - Alta, edición y eliminación de productos
 - Actualización de stock
 - Registro de ventas
 - Reportes simples de inventario
 
-## 🛠️ Tecnologías
-- Python 3.x
+## Tecnologías
+- Python 
 - Flask
-- SQLite
+- MySQL
 - Bootstrap (interfaz web)
 
-## 📂 Estructura del proyecto
+## Estructura del proyecto
 - `app.py` → punto de entrada de la aplicación
 - `database.py` → conexión a la base de datos
 - `models.py` → clases principales (Producto, Venta, Inventario)
@@ -25,7 +25,7 @@ Aplicación web desarrollada con **Flask, Python y MySql** para la gestión de p
 - `tests/` → pruebas unitarias
 - `docs/` → documentación y diagramas
 
-## ▶️ Cómo correr el proyecto
+## ▶ Cómo correr el proyecto
 1. Clonar el repositorio:
    ```bash
    git clone https://github.com/usuario/grupo-11-gestion-cafeteria.git

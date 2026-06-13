@@ -1,5 +1,3 @@
-# modelos/producto.py
-
 from database import conectar
 
 class Producto:
@@ -44,40 +42,27 @@ class Producto:
         conexion.close()
         return productos
 
-
     # OBTENER PRODUCTO
     @staticmethod
     def obtener_producto(id):
-
         conexion = conectar()
         cursor = conexion.cursor(dictionary=True)
-
         cursor.execute(
             "SELECT * FROM productos WHERE id = %s",
             (id,)
         )
-
         fila = cursor.fetchone()
-
         conexion.close()
-
         if fila:
-
             producto = Producto(
-                fila["nombre"],
-                fila["categoria"],
-                fila["precio"],
-                fila["stock"]
+                id_producto=fila["id"],
+                nombre=fila["nombre"],
+                categoria=fila["categoria"],
+                precio=fila["precio"],
+                stock=fila["stock"],
+                disponible=fila["disponible"]
             )
-
-            producto.id = fila["id"]
-
             return producto
-
-        return None
-
-        
-
         return None
 
     # EDITAR PRODUCTO
@@ -90,7 +75,8 @@ class Producto:
         SET nombre = %s,
             categoria = %s,
             precio = %s,
-            stock = %s
+            stock = %s,
+            disponible = %s
         WHERE id = %s
         """
 
@@ -99,6 +85,7 @@ class Producto:
             self.categoria,
             self.precio,
             self.stock,
+            self.disponible,
             id
         )
 
@@ -110,40 +97,4 @@ class Producto:
     @staticmethod
     def eliminar_producto(id):
         conexion = conectar()
-        cursor = conexion.cursor()
-        cursor.execute("DELETE FROM productos WHERE id = %s", (id,))
-        conexion.commit()
-        conexion.close()
-
-    # Método vender
-    def vender(self, cantidad):
-        if cantidad <= 0:
-            print("Cantidad inválida")
-            return
-        if self.stock >= cantidad:
-            self.stock -= cantidad
-            print(f"Se vendieron {cantidad} unidades de {self.nombre}")
-        else:
-            print("No hay suficiente stock")
-
-    # Método reponer stock
-    def reponer_stock(self, cantidad):
-        if cantidad > 0:
-            self.stock += cantidad
-            print(f"Stock actualizado: {self.stock}")
-
-    # Método sin stock
-    def sin_stock(self):
-        return self.stock == 0
-
-    # Método calcular valor stock
-    def calcular_valor_stock(self):
-        return self.precio * self.stock
-
-    # Método actualizar precio
-    def actualizar_precio(self, nuevo_precio):
-        if nuevo_precio > 0:
-            self.precio = nuevo_precio
-
-    def __str__(self):
-        return f"{self.nombre} - ${self.precio} - Stock: {self.stock}"
+        cursor = conexion.cursor

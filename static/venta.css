@@ -1,0 +1,90 @@
+body {
+  background-image: url('/static/Fondo_Venta.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* Rectángulo marrón semitransparente */
+.overlay {
+  background-color: rgba(75, 46, 46, 0.92);
+  min-height: 100vh;
+  padding: 40px;
+}
+
+/* Navbar */
+.navbar {
+  background-color: rgba(75, 46, 46, 0.95);
+  justify-content: center;
+}
+
+.navbar-brand {
+  margin: 0 auto;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* Títulos */
+h2 {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+/* Botones con ícono arriba */
+.btn-custom {
+  background-color: #A67B5B;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  padding: 10px 16px;   /* compacto */
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;   /* ícono arriba, texto abajo */
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-custom:hover {
+  background-color: #8B5E3C;
+  transform: translateY(-2px);
+}
+
+/* Íconos más grandes sin agrandar el botón */
+.icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 6px;
+}
+
+/* Tabla */
+.table {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #4B2E2E;
+  color: #fff;
+}
+
+.table tfoot {
+  background-color: #A67B5B;
+  color: #fff;
+  font-weight: bold;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+#totalVenta {
+  font-size: 1.2rem;
+}

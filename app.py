@@ -1,17 +1,14 @@
-from flask import Flask, render_template, request, redirect
-from database import conectar
+from flask import Flask, render_template, request
+import json
 from modelos.producto import Producto
 from modelos.venta import Venta
-from modelos.inventario import Inventario
 
 app = Flask(__name__)
 
-# HOME como pantalla inicial
 @app.route("/")
 def home():
     return render_template("Home.html")
 
-# CREAR PRODUCTO
 @app.route("/crear", methods=["GET", "POST"])
 def crear_producto():
     if request.method == "POST":
@@ -27,17 +24,15 @@ def crear_producto():
             stock=stock
         )
         nuevo_producto.crear_producto()
-        return redirect("/inventario")
+        return render_template("Inventario.html", productos=Producto.listar_productos())
 
     return render_template("crear_producto.html")
 
-# INVENTARIO
 @app.route("/inventario")
 def inventario():
     productos = Producto.listar_productos()
     return render_template("Inventario.html", productos=productos)
 
-# EDITAR PRODUCTO
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_producto(id):
     if request.method == "POST":
@@ -53,45 +48,54 @@ def editar_producto(id):
             stock=stock
         )
         producto.editar_producto(id)
-        return redirect("/inventario")
+        return render_template("Inventario.html", productos=Producto.listar_productos())
 
     producto = Producto.obtener_producto(id)
     return render_template("editar_producto.html", producto=producto)
 
-# ELIMINAR PRODUCTO
 @app.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar_producto(id):
     Producto.eliminar_producto(id)
-    return redirect("/inventario")
+    return render_template("Inventario.html", productos=Producto.listar_productos())
 
 @app.route("/venta", methods=["GET", "POST"])
 def venta():
-
     if request.method == "POST":
+        productos_json = request.form.get("productos_json")
+        productos_lista = json.loads(productos_json) if productos_json else []
 
-        producto_id = int(request.form["producto_id"])
-        cantidad = int(request.form["cantidad"])
-
-        producto = Producto.obtener_producto(producto_id)
-
-        if producto.stock < cantidad:
-            return "Stock insuficiente"
+        if not productos_lista:
+            return render_template("venta.html", productos=Producto.listar_productos(), error="No se seleccionaron productos")
 
         venta = Venta()
+        for item in productos_lista:
+            producto_id = int(item["id"])
+            cantidad = int(item["cantidad"])
+            datos = Producto.obtener_producto(producto_id)  # devuelve un objeto Producto
 
-        venta.agregar_producto(producto, cantidad)
+            # ✅ Usamos atributos en lugar de índices
+            if datos.stock < cantidad:
+                return render_template("venta.html", productos=Producto.listar_productos(), error=f"Stock insuficiente para {datos.nombre}")
 
-        producto.stock -= cantidad
+            producto = Producto(
+                id_producto=datos.id,
+                nombre=datos.nombre,
+                categoria=datos.categoria,
+                precio=datos.precio,
+                stock=datos.stock - cantidad,
+                disponible=datos.disponible
+            )
 
-        producto.editar_producto(producto_id)
+            venta.agregar_producto(producto, cantidad)
+            producto.editar_producto(producto_id)
 
-        return redirect("/inventario")
+        venta.guardar_venta()
+        venta.productos = []
 
-    productos = Inventario.listar_productos()
+        return render_template("venta.html", productos=Producto.listar_productos(), success=True)
 
-    return render_template(
-        "venta.html",
-        productos=productos
-    )
+    productos = Producto.listar_productos()
+    return render_template("venta.html", productos=productos)
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
