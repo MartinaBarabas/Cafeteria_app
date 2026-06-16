@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import json
 from modelos.producto import Producto
 from modelos.venta import Venta
@@ -35,11 +35,17 @@ def inventario():
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_producto(id):
+
     if request.method == "POST":
+
+        print("ENTRO AL POST")
+
         nombre = request.form["nombre"]
         categoria = request.form["categoria"]
         precio = float(request.form["precio"])
         stock = int(request.form["stock"])
+
+        print(nombre, categoria, precio, stock)
 
         producto = Producto(
             nombre=nombre,
@@ -47,10 +53,15 @@ def editar_producto(id):
             precio=precio,
             stock=stock
         )
+
         producto.editar_producto(id)
-        return render_template("Inventario.html", productos=Producto.listar_productos())
+
+        print("PRODUCTO ACTUALIZADO")
+
+        return redirect("/inventario")
 
     producto = Producto.obtener_producto(id)
+
     return render_template("editar_producto.html", producto=producto)
 
 @app.route("/eliminar/<int:id>", methods=["POST"])
@@ -99,3 +110,4 @@ def venta():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
