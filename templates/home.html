@@ -16,25 +16,38 @@
 
   <div class="container text-center mt-5">
     <p class="welcome-text">Bienvenida al sistema de gestión de la cafetería. Elegí una opción para comenzar:</p>
-    <div class="menu-container mx-auto">
-      <div class="row g-3">
-        <div class="col-md-4 col-12">
-          <a href="/inventario" class="btn btn-custom btn-lg w-100">
-            <img src="{{ url_for('static', filename='icon_inventario.png') }}" class="icon" alt="Inventario">
-            Inventario
-          </a>
+    <div class="row g-4">
+      <!-- Inventario -->
+      <div class="col-md-4 col-12">
+        <div class="card card-custom">
+          <img src="{{ url_for('static', filename='icon_inventario.png') }}" class="card-icon" alt="Inventario">
+          <div class="card-body">
+            <h5 class="card-title">Inventario</h5>
+            <p class="card-text">Gestioná productos y stock</p>
+            <a href="/inventario" class="btn btn-card">Ingresar</a>
+          </div>
         </div>
-        <div class="col-md-4 col-12">
-          <a href="/venta" class="btn btn-custom btn-lg w-100">
-            <img src="{{ url_for('static', filename='icon_ventas.png') }}" class="icon" alt="Ventas">
-            Realizar Venta
-          </a>
+      </div>
+      <!-- Venta -->
+      <div class="col-md-4 col-12">
+        <div class="card card-custom">
+          <img src="{{ url_for('static', filename='icon_ventas.png') }}" class="card-icon" alt="Ventas">
+          <div class="card-body">
+            <h5 class="card-title">Realizar Venta</h5>
+            <p class="card-text">Registrá ventas y totales</p>
+            <a href="/venta" class="btn btn-card">Ingresar</a>
+          </div>
         </div>
-        <div class="col-md-4 col-12">
-          <a href="/reportes" class="btn btn-custom btn-lg w-100">
-            <img src="{{ url_for('static', filename='icon_reportes.png') }}" class="icon" alt="Reportes">
-            Generar Reporte
-          </a>
+      </div>
+      <!-- Reportes -->
+      <div class="col-md-4 col-12">
+        <div class="card card-custom">
+          <img src="{{ url_for('static', filename='icon_reportes.png') }}" class="card-icon" alt="Reportes">
+          <div class="card-body">
+            <h5 class="card-title">Generar Reporte</h5>
+            <p class="card-text">Consultá ventas y stock</p>
+            <a href="/reportes" class="btn btn-card">Ingresar</a>
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import json
 from modelos.producto import Producto
 from modelos.venta import Venta
+from modelos.reporte import Reporte   
 
 app = Flask(__name__)
 
@@ -9,6 +10,7 @@ app = Flask(__name__)
 def home():
     return render_template("Home.html")
 
+# ---------------- INVENTARIO ----------------
 @app.route("/crear", methods=["GET", "POST"])
 def crear_producto():
     if request.method == "POST":
@@ -58,6 +60,7 @@ def eliminar_producto(id):
     Producto.eliminar_producto(id)
     return render_template("Inventario.html", productos=Producto.listar_productos())
 
+# ---------------- VENTAS ----------------
 @app.route("/venta", methods=["GET", "POST"])
 def venta():
     if request.method == "POST":
@@ -71,9 +74,8 @@ def venta():
         for item in productos_lista:
             producto_id = int(item["id"])
             cantidad = int(item["cantidad"])
-            datos = Producto.obtener_producto(producto_id)  # devuelve un objeto Producto
+            datos = Producto.obtener_producto(producto_id)
 
-            # ✅ Usamos atributos en lugar de índices
             if datos.stock < cantidad:
                 return render_template("venta.html", productos=Producto.listar_productos(), error=f"Stock insuficiente para {datos.nombre}")
 
@@ -97,5 +99,21 @@ def venta():
     productos = Producto.listar_productos()
     return render_template("venta.html", productos=productos)
 
+# ---------------- REPORTES ----------------
+@app.route("/reportes")
+def reportes():
+    return render_template("reportes.html")
+
+@app.route("/reportes/productos")
+def reporte_productos():
+    productos = Reporte.productos_sin_stock()
+    return render_template("reportes_productos.html", productos=productos)
+
+@app.route("/reportes/ventas")
+def reporte_ventas():
+    detalle = Reporte.detalle_ventas_del_dia()
+    return render_template("reportes_ventas.html", detalle=detalle)
+
+# ---------------- MAIN ----------------
 if __name__ == "__main__":
     app.run(debug=True)

@@ -17,45 +17,51 @@ body {
   font-size: 1.8rem;
 }
 
-.menu-container {
-  background-color: rgba(75, 46, 46, 0.95);
-  padding: 30px;
-  border-radius: 12px;
-  display: inline-block;
-}
-
-.btn-custom {
-  background-color: #A67B5B;
-  color: white;
-  border-radius: 8px;
-  border: none;
-  font-size: 1.1rem;   /* tamaño del texto */
-  display: flex;
-  flex-direction: column; /* texto debajo del icono */
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  min-height: 150px; /* asegura que todos los botones tengan la misma altura */
-}
-
-.btn-custom:hover {
-  background-color: #8B5E3C;
-}
-
 .welcome-text {
   font-size: 1.2rem;
   margin-bottom: 25px;
 }
 
-.icon {
-  width: 6.2em;   /* tamaño relativo al texto */
-  height: 6.2em;
-  margin-bottom: 6px;
+.card-custom {
+  background-color: rgba(75, 46, 46, 0.95);
+  color: white;
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.2s ease;
+  min-height: 280px; /* asegura altura uniforme */
+}
+
+.card-custom:hover {
+  transform: scale(1.05);
+}
+
+.card-icon {
+  width: 5em;
+  height: 5em;
+  margin: 0 auto 10px;
+}
+
+.btn-card {
+  background-color: #A67B5B;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  padding: 8px 20px;
+}
+
+.btn-card:hover {
+  background-color: #8B5E3C;
 }
 
 @media (max-width: 768px) {
-  .icon {
-    width: 1em;
-    height: 1em;
+  .card-custom {
+    min-height: auto;
+    padding: 15px;
+  }
+  .card-icon {
+    width: 3.5em;
+    height: 3.5em;
   }
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cafetería - Reportes</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='reportes.css') }}">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark">
+        <span class="navbar-brand mb-0 h1">Cafetería UNAB 2026</span>
+    </nav>
+
+    <div class="container text-center mt-5">
+        <p class="welcome-text">Ventas del día - {{ fecha }}</p>
+
+        <!-- Botones arriba -->
+        <div class="row mb-4">
+            <div class="col-md-6 col-12 mb-3">
+                <a href="/reportes" class="btn btn-custom btn-lg w-100">
+                    <img src="{{ url_for('static', filename='icon_reportes.png') }}" class="icon" alt="Reportes">
+                    Volver a Reportes
+                </a>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <a href="/" class="btn btn-custom btn-lg w-100">
+                    <img src="{{ url_for('static', filename='icon_home.png') }}" class="icon" alt="Home">
+                    Volver al Home
+                </a>
+            </div>
+        </div>
+
+        <div class="menu-container mx-auto">
+            {% if detalle %}
+                <p class="fw-bold mb-4">La cantidad de ventas del día de hoy fueron: {{ detalle|groupby("venta_id")|length }}</p>
+
+                {% for venta in detalle|groupby("venta_id") %}
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-white">
+                        <strong>Venta realizada</strong> — Fecha: {{ venta.list[0].fecha }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover bg-white">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in venta.list %}
+                                <tr>
+                                    <td>{{ item.nombre }}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td>${{ item.subtotal }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="text-end fw-bold">Total: ${{ venta.list|sum(attribute='subtotal') }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center">
+                    No se registraron ventas en el día de hoy.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
