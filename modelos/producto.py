@@ -1,7 +1,8 @@
 from database import conectar
 
 class Producto:
-    def __init__(self, id_producto=None, nombre=None, categoria=None, precio=0, stock=0, disponible=True):
+    def __init__(self, id_producto=None, nombre=None, categoria=None,
+                 precio=0, stock=0, disponible=True):
         self.id = id_producto
         self.nombre = nombre
         self.categoria = categoria
@@ -25,7 +26,7 @@ class Producto:
             self.categoria,
             self.precio,
             self.stock,
-            True
+            self.stock > 0
         )
 
         cursor.execute(sql, valores)
@@ -37,7 +38,12 @@ class Producto:
     def listar_productos():
         conexion = conectar()
         cursor = conexion.cursor()
-        cursor.execute("SELECT id, nombre, categoria, precio, stock, disponible FROM productos")
+
+        cursor.execute("""
+            SELECT id, nombre, categoria, precio, stock, disponible
+            FROM productos
+        """)
+
         productos = cursor.fetchall()
         conexion.close()
         return productos
@@ -47,14 +53,17 @@ class Producto:
     def obtener_producto(id):
         conexion = conectar()
         cursor = conexion.cursor(dictionary=True)
+
         cursor.execute(
             "SELECT * FROM productos WHERE id = %s",
             (id,)
         )
+
         fila = cursor.fetchone()
         conexion.close()
+
         if fila:
-            producto = Producto(
+            return Producto(
                 id_producto=fila["id"],
                 nombre=fila["nombre"],
                 categoria=fila["categoria"],
@@ -62,7 +71,7 @@ class Producto:
                 stock=fila["stock"],
                 disponible=fila["disponible"]
             )
-            return producto
+
         return None
 
     # EDITAR PRODUCTO
@@ -85,7 +94,7 @@ class Producto:
             self.categoria,
             self.precio,
             self.stock,
-            self.disponible,
+            self.stock > 0,
             id
         )
 
@@ -97,4 +106,12 @@ class Producto:
     @staticmethod
     def eliminar_producto(id):
         conexion = conectar()
-        cursor = conexion.cursor
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            "DELETE FROM productos WHERE id = %s",
+            (id,)
+        )
+
+        conexion.commit()
+        conexion.close()

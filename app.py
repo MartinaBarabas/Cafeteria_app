@@ -71,6 +71,24 @@ def eliminar_producto(id):
     Producto.eliminar_producto(id)
     return render_template("Inventario.html", productos=Producto.listar_productos())
 
+@app.route("/reponer/<int:id>", methods=["GET", "POST"])
+def reponer_producto(id):
+    producto = Producto.obtener_producto(id)
+
+    if request.method == "POST":
+        cantidad = int(request.form["cantidad"])
+
+        producto.stock += cantidad
+
+        producto.editar_producto(id)
+
+        return redirect("/inventario")
+
+    return render_template(
+        "reponer_producto.html",
+        producto=producto
+    )
+    
 # ---------------- VENTAS ----------------
 @app.route("/venta", methods=["GET", "POST"])
 def venta():
@@ -124,6 +142,8 @@ def reporte_productos():
 def reporte_ventas():
     detalle = Reporte.detalle_ventas_del_dia()
     return render_template("reportes_ventas.html", detalle=detalle)
+
+
 
 # ---------------- MAIN ----------------
 if __name__ == "__main__":
