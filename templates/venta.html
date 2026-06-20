@@ -42,7 +42,9 @@
                         <label for="producto_id" class="form-label">Producto</label>
                         <select class="form-select" id="producto_id">
                             {% for producto in productos %}
-                            <option value="{{ producto[0] }}" data-precio="{{ producto[3] }}">
+                            <option value="{{ producto[0] }}"
+                                    data-precio="{{ producto[3] }}"
+                                    data-stock="{{ producto[4] }}">
                                 {{ producto[1] }} (Stock: {{ producto[4] }})
                             </option>
                             {% endfor %}
@@ -96,20 +98,57 @@
         Volver al Inventario
     </a>
 </div>
-
-    <!-- Script -->
+    </form>
     <script>
         let total = 0;
         let productosVenta = [];
 
         function agregarProducto() {
+
             const select = document.getElementById("producto_id");
-            const cantidad = parseInt(document.getElementById("cantidad").value);
-            const precio = parseFloat(select.selectedOptions[0].dataset.precio);
-            const nombre = select.selectedOptions[0].text;
 
-            if (!cantidad || cantidad <= 0) return;
+            const cantidad = parseInt(
+                document.getElementById("cantidad").value
+            );
 
+            const precio = parseFloat(
+                select.selectedOptions[0].dataset.precio
+            );
+
+            const stock = parseInt(
+                select.selectedOptions[0].dataset.stock
+            );
+
+            const nombre = select.selectedOptions[0].text.split(" (Stock:")[0];
+
+            if (!cantidad || cantidad <= 0) {
+                alert("Ingrese una cantidad válida");
+                return;
+            }
+
+            if (cantidad > stock) {
+                alert(
+                    "Stock insuficiente.\n\n" +
+                    "Disponible: " + stock +
+                    "\nSolicitado: " + cantidad
+                );
+                return;
+            }
+
+            // Actualizar stock visual del producto
+            const nuevoStock = stock - cantidad;
+
+            select.selectedOptions[0].dataset.stock = nuevoStock;
+
+            const nombreProducto =
+                select.selectedOptions[0].text.split(" (Stock:")[0];
+
+            select.selectedOptions[0].text =
+                nombreProducto + " (Stock: " + nuevoStock + ")";
+
+            if (nuevoStock === 0) {
+                select.selectedOptions[0].disabled = true;
+            }
             const subtotal = precio * cantidad;
             total += subtotal;
 
@@ -118,23 +157,39 @@
                 cantidad: cantidad
             });
 
-            const tabla = document.getElementById("tablaVenta").querySelector("tbody");
+            const tabla = document
+                .getElementById("tablaVenta")
+                .querySelector("tbody");
+
             const fila = document.createElement("tr");
+
             fila.innerHTML = `
                 <td>${nombre}</td>
                 <td>${cantidad}</td>
                 <td>$${precio.toFixed(2)}</td>
                 <td>$${subtotal.toFixed(2)}</td>
             `;
+
             tabla.appendChild(fila);
 
-            document.getElementById("totalVenta").textContent = "$" + total.toFixed(2);
+            document.getElementById("totalVenta").textContent =
+                "$" + total.toFixed(2);
+
             document.getElementById("cantidad").value = "";
         }
 
-        document.getElementById("ventaForm").addEventListener("submit", function() {
-            document.getElementById("productos_json").value = JSON.stringify(productosVenta);
-        });
+            document.getElementById("ventaForm").addEventListener("submit", function (e) {
+
+                if (productosVenta.length === 0) {
+                    e.preventDefault();
+                    alert("Debe agregar al menos un producto.");
+                    return;
+                }
+
+                document.getElementById("productos_json").value =
+                    JSON.stringify(productosVenta);
+            });
     </script>
+   
 </body>
 </html>
