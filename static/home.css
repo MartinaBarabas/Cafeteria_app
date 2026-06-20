@@ -65,3 +65,35 @@ body {
     height: 3.5em;
   }
 }
+
+/* 🧠 títulos de cards más grandes */
+.titulo-card {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+/* 🖤 borde negro en la letra */
+.titulo-borde {
+    color: white;
+    text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+}
+
+/* 🖼️ imágenes más grandes */
+.card-icon {
+    width: 160px;   /* antes era más chico */
+    height: auto;
+    margin-top: 15px;
+}
+
+/* efecto opcional pro */
+.card-custom {
+    transition: transform 0.2s ease;
+}
+
+.card-custom:hover {
+    transform: scale(1.05);
+}

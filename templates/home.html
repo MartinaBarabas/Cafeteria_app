@@ -4,54 +4,81 @@
 <head>
   <meta charset="UTF-8">
   <title>Cafetería UNAB 2026</title>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <!-- Archivo CSS externo -->
+
+  <!-- CSS externo -->
   <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 
 <body>
+
   <nav class="navbar navbar-dark">
     <span class="navbar-brand mb-0 h1">Cafetería UNAB 2026</span>
   </nav>
 
   <div class="container text-center mt-5">
-    <p class="welcome-text">Bienvenida al sistema de gestión de la cafetería. Elegí una opción para comenzar:</p>
+
+    <!-- TÍTULO PRINCIPAL -->
+    <p class="welcome-text titulo-principal">
+      Bienvenida al sistema de gestión de la cafetería. Elegí una opción para comenzar:
+    </p>
+
     <div class="row g-4">
-      <!-- Inventario -->
+
+      <!-- INVENTARIO -->
       <div class="col-md-4 col-12">
         <div class="card card-custom">
-          <img src="{{ url_for('static', filename='icon_inventario.png') }}" class="card-icon" alt="Inventario">
+
+          <img src="{{ url_for('static', filename='icon_inventario.png') }}"
+               class="card-icon"
+               alt="Inventario">
+
           <div class="card-body">
-            <h5 class="card-title">Inventario</h5>
+            <h5 class="card-title titulo-card titulo-borde">Inventario</h5>
             <p class="card-text">Gestioná productos y stock</p>
             <a href="/inventario" class="btn btn-card">Ingresar</a>
           </div>
+
         </div>
       </div>
-      <!-- Venta -->
+
+      <!-- VENTAS -->
       <div class="col-md-4 col-12">
         <div class="card card-custom">
-          <img src="{{ url_for('static', filename='icon_ventas.png') }}" class="card-icon" alt="Ventas">
+
+          <img src="{{ url_for('static', filename='icon_ventas.png') }}"
+               class="card-icon"
+               alt="Ventas">
+
           <div class="card-body">
-            <h5 class="card-title">Realizar Venta</h5>
+            <h5 class="card-title titulo-card titulo-borde">Realizar Venta</h5>
             <p class="card-text">Registrá ventas y totales</p>
             <a href="/venta" class="btn btn-card">Ingresar</a>
           </div>
+
         </div>
       </div>
-      <!-- Reportes -->
+
+      <!-- REPORTES -->
       <div class="col-md-4 col-12">
         <div class="card card-custom">
-          <img src="{{ url_for('static', filename='icon_reportes.png') }}" class="card-icon" alt="Reportes">
+
+          <img src="{{ url_for('static', filename='icon_reportes.png') }}"
+               class="card-icon"
+               alt="Reportes">
+
           <div class="card-body">
-            <h5 class="card-title">Generar Reporte</h5>
+            <h5 class="card-title titulo-card titulo-borde">Generar Reporte</h5>
             <p class="card-text">Consultá ventas y stock</p>
             <a href="/reportes" class="btn btn-card">Ingresar</a>
           </div>
+
         </div>
       </div>
+
     </div>
   </div>
-</body>
 
+</body>
 </html>
