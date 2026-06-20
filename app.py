@@ -177,7 +177,14 @@ def venta():
 # ---------------- REPORTES ----------------
 @app.route("/reportes")
 def reportes():
-    return render_template("reportes.html")
+    productos = Reporte.productos_sin_stock()
+    ventas = Reporte.ventas_del_dia()
+
+    return render_template(
+        "reportes.html",
+        productos=productos,
+        total_ventas=len(ventas)
+    )
 
 @app.route("/reportes/productos")
 def reporte_productos():

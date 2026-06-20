@@ -6,190 +6,187 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='venta.css') }}">
 </head>
+
 <body>
-    <div class="overlay">
-        <nav class="navbar navbar-dark">
-            <span class="navbar-brand mb-0 h1">Cafetería UNAB 2026</span>
-        </nav>
+<div class="overlay">
 
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">Registrar Venta</h2>
+    <nav class="navbar navbar-dark">
+        <span class="navbar-brand mb-0 h1">Cafetería UNAB 2026</span>
+    </nav>
 
-            <!-- Alertas -->
-            {% if success %}
-            <div class="alert alert-success" role="alert">
-                Venta registrada con éxito
-            </div>
-            <script>
-                // limpiar tabla y variables después de éxito
-                productosVenta = [];
-                total = 0;
-                document.getElementById("tablaVenta").querySelector("tbody").innerHTML = "";
-                document.getElementById("totalVenta").textContent = "$0.00";
-            </script>
-            {% endif %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Registrar Venta</h2>
 
-            {% if error %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-            {% endif %}
+        <!-- ALERTAS -->
+        {% if success %}
+        <div class="alert alert-success">Venta registrada con éxito</div>
+        {% endif %}
 
-            <!-- Formulario -->
-            <form id="ventaForm" method="POST" action="/venta" class="mb-4">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="producto_id" class="form-label">Producto</label>
-                        <select class="form-select" id="producto_id">
-                            {% for producto in productos %}
-                            <option value="{{ producto[0] }}"
-                                    data-precio="{{ producto[3] }}"
-                                    data-stock="{{ producto[4] }}">
-                                {{ producto[1] }} (Stock: {{ producto[4] }})
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control" id="cantidad" min="1">
-                    </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="button" class="btn btn-custom w-100" onclick="agregarProducto()">
-                            Agregar
-                        </button>
-                    </div>
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <!-- FORM -->
+        <form id="ventaForm" method="POST" action="/venta" class="mb-4">
+
+            <div class="row mb-3">
+
+                <!-- PRODUCTO -->
+                <div class="col-md-6">
+                    <label class="form-label">Producto</label>
+
+                    <select class="form-select" id="producto_id">
+
+                        {% for producto in productos %}
+
+                        {% set stock = producto[4] %}
+
+                        <option value="{{ producto[0] }}"
+                                data-precio="{{ producto[3] }}"
+                                data-stock="{{ stock }}"
+                                {% if stock <= 0 %}disabled{% endif %}
+                                {% if stock <= 0 %}style="color:red"{% endif %}>
+
+                            {{ producto[1] }} (Stock: {{ stock }})
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
                 </div>
 
-                <!-- Campo oculto -->
-                <input type="hidden" id="productos_json" name="productos_json">
+                <!-- CANTIDAD -->
+                <div class="col-md-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" class="form-control" id="cantidad" min="1">
+                </div>
 
-                <!-- Tabla -->
-                <table class="table table-striped table-bordered text-center" id="tablaVenta">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                            <td id="totalVenta">$0.00</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                <!-- BOTÓN -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-custom w-100" onclick="agregarProducto()">
+                        Agregar
+                    </button>
+                </div>
 
-                <!-- Botones -->
-<div class="d-flex justify-content-between mt-4">
-    <button type="submit" class="btn btn-custom">
-        <img src="{{ url_for('static', filename='icon_RegistrarVenta.png') }}" class="icon" alt="Venta">
-        Registrar Venta
-    </button>
-    <a href="/" class="btn btn-custom">
-        <img src="{{ url_for('static', filename='icon_home.png') }}" class="icon" alt="Home">
-        Volver al Home
-    </a>
-    <a href="/inventario" class="btn btn-custom">
-        <img src="{{ url_for('static', filename='icon_inventarioVentas.png') }}" class="icon" alt="Inventario">
-        Volver al Inventario
-    </a>
+            </div>
+
+            <!-- OCULTO -->
+            <input type="hidden" id="productos_json" name="productos_json">
+
+            <!-- TABLA -->
+            <table class="table table-striped table-bordered text-center" id="tablaVenta">
+
+                <thead class="table-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+                </thead>
+
+                <tbody></tbody>
+
+                <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                    <td id="totalVenta">$0.00</td>
+                </tr>
+                </tfoot>
+
+            </table>
+
+            <!-- BOTONES -->
+            <div class="d-flex justify-content-between mt-4">
+
+                <button type="submit" class="btn btn-custom">
+                    Registrar Venta
+                </button>
+
+                <a href="/" class="btn btn-custom">Home</a>
+
+                <a href="/inventario" class="btn btn-custom">Inventario</a>
+
+            </div>
+
+        </form>
+    </div>
 </div>
-    </form>
-    <script>
-        let total = 0;
-        let productosVenta = [];
 
-        function agregarProducto() {
+<script>
+let total = 0;
+let productosVenta = [];
 
-            const select = document.getElementById("producto_id");
+function agregarProducto() {
 
-            const cantidad = parseInt(
-                document.getElementById("cantidad").value
-            );
+    const select = document.getElementById("producto_id");
+    const option = select.selectedOptions[0];
 
-            const precio = parseFloat(
-                select.selectedOptions[0].dataset.precio
-            );
+    const cantidad = parseInt(document.getElementById("cantidad").value);
+    const precio = parseFloat(option.dataset.precio);
+    let stock = parseInt(option.dataset.stock);
 
-            const stock = parseInt(
-                select.selectedOptions[0].dataset.stock
-            );
+    const nombre = option.text.split(" (Stock:")[0];
 
-            const nombre = select.selectedOptions[0].text.split(" (Stock:")[0];
+    if (!cantidad || cantidad <= 0) {
+        alert("Ingrese una cantidad válida");
+        return;
+    }
 
-            if (!cantidad || cantidad <= 0) {
-                alert("Ingrese una cantidad válida");
-                return;
-            }
+    if (cantidad > stock) {
+        alert("Stock insuficiente");
+        return;
+    }
 
-            if (cantidad > stock) {
-                alert(
-                    "Stock insuficiente.\n\n" +
-                    "Disponible: " + stock +
-                    "\nSolicitado: " + cantidad
-                );
-                return;
-            }
+    // actualizar stock
+    stock -= cantidad;
+    option.dataset.stock = stock;
+    option.text = nombre + " (Stock: " + stock + ")";
 
-            // Actualizar stock visual del producto
-            const nuevoStock = stock - cantidad;
+    if (stock <= 0) {
+        option.disabled = true;
+        option.style.color = "red";
+    }
 
-            select.selectedOptions[0].dataset.stock = nuevoStock;
+    const subtotal = precio * cantidad;
+    total += subtotal;
 
-            const nombreProducto =
-                select.selectedOptions[0].text.split(" (Stock:")[0];
+    productosVenta.push({
+        id: select.value,
+        cantidad: cantidad
+    });
 
-            select.selectedOptions[0].text =
-                nombreProducto + " (Stock: " + nuevoStock + ")";
+    const tabla = document.querySelector("#tablaVenta tbody");
 
-            if (nuevoStock === 0) {
-                select.selectedOptions[0].disabled = true;
-            }
-            const subtotal = precio * cantidad;
-            total += subtotal;
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+        <td>${nombre}</td>
+        <td>${cantidad}</td>
+        <td>$${precio.toFixed(2)}</td>
+        <td>$${subtotal.toFixed(2)}</td>
+    `;
 
-            productosVenta.push({
-                id: select.value,
-                cantidad: cantidad
-            });
+    tabla.appendChild(fila);
 
-            const tabla = document
-                .getElementById("tablaVenta")
-                .querySelector("tbody");
+    document.getElementById("totalVenta").textContent =
+        "$" + total.toFixed(2);
 
-            const fila = document.createElement("tr");
+    document.getElementById("cantidad").value = "";
+}
 
-            fila.innerHTML = `
-                <td>${nombre}</td>
-                <td>${cantidad}</td>
-                <td>$${precio.toFixed(2)}</td>
-                <td>$${subtotal.toFixed(2)}</td>
-            `;
+document.getElementById("ventaForm").addEventListener("submit", function (e) {
 
-            tabla.appendChild(fila);
+    if (productosVenta.length === 0) {
+        e.preventDefault();
+        alert("Debe agregar al menos un producto.");
+        return;
+    }
 
-            document.getElementById("totalVenta").textContent =
-                "$" + total.toFixed(2);
+    document.getElementById("productos_json").value =
+        JSON.stringify(productosVenta);
+});
+</script>
 
-            document.getElementById("cantidad").value = "";
-        }
-
-            document.getElementById("ventaForm").addEventListener("submit", function (e) {
-
-                if (productosVenta.length === 0) {
-                    e.preventDefault();
-                    alert("Debe agregar al menos un producto.");
-                    return;
-                }
-
-                document.getElementById("productos_json").value =
-                    JSON.stringify(productosVenta);
-            });
-    </script>
-   
 </body>
 </html>
